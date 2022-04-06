@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
 using UnityEngine;
 
 public class ShootingAgent : Agent
@@ -72,15 +73,16 @@ public class ShootingAgent : Agent
         
         AddReward(-1f/MaxStep);
     }
-    public override void OnActionReceived(float[] vectorAction)
+    public override void OnActionReceived(ActionBuffers actions)
     {
-        if (Mathf.RoundToInt(vectorAction[0]) >= 1)
+        var continuousActions = actions.ContinuousActions;
+        if (Mathf.RoundToInt(continuousActions[0]) >= 1)
         {
             Shoot();
         }
 
-        Rb.velocity = new Vector3(vectorAction[1] * speed, 0f, vectorAction[2] * speed);
-        transform.Rotate(Vector3.up, vectorAction[3] * rotationSpeed);
+        Rb.velocity = new Vector3(continuousActions[1] * speed, 0f, continuousActions[2] * speed);
+        transform.Rotate(Vector3.up, continuousActions[3] * rotationSpeed);
     }
     
     public override void Initialize()
@@ -93,12 +95,13 @@ public class ShootingAgent : Agent
         EnvironmentParameters = Academy.Instance.EnvironmentParameters;
     }
     
-    public override void Heuristic(float[] actionsOut)
+    public override void Heuristic(in ActionBuffers actionsOut)
     {
-        actionsOut[0] = Input.GetKey(KeyCode.P) ? 1f : 0f;
-        actionsOut[2] = Input.GetAxis("Horizontal");
+        var continuousActionsOut = actionsOut.ContinuousActions;
+        continuousActionsOut[0] = Input.GetKey(KeyCode.P) ? 1f : 0f;
+        continuousActionsOut[2] = Input.GetAxis("Horizontal");
         //actionsOut[1] = -Input.GetAxis("Vertical");
-        actionsOut[3] = Input.GetAxis("Vertical");
+        continuousActionsOut[3] = Input.GetAxis("Vertical");
     }
 
     public override void OnEpisodeBegin()
