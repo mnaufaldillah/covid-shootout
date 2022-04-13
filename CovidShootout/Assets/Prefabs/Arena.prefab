@@ -1403,7 +1403,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: e42e30d0255b4784196eb82e1718380c, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: c2bf0959c7c9e435d95b81879c3c20e8, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: Shooter
